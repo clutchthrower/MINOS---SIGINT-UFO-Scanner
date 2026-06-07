@@ -14,6 +14,8 @@ requirements = python3,kivy,numpy,opencv-python-headless
 orientation = landscape
 
 android.permissions = CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+android.accept_sdk_license = True
+android.skip_update = False
 
 fullscreen = 1
 
