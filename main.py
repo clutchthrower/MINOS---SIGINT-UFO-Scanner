@@ -46,16 +46,18 @@ from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 
 
-def request_android_permissions():
+def request_android_permissions(callback=None):
     try:
         from android.permissions import request_permissions, Permission
         request_permissions([
             Permission.CAMERA,
             Permission.READ_EXTERNAL_STORAGE,
             Permission.WRITE_EXTERNAL_STORAGE,
-        ])
+        ], callback)
     except Exception:
-        pass
+        # Not on Android (desktop) or permissions already granted — start immediately
+        if callback:
+            callback([], [])
 
 
 GREEN = (0, 255, 110)
@@ -281,9 +283,8 @@ class MinosSigintUFO(FloatLayout):
         self.add_slider_block("flow_radius", f"OPTICAL FLOW RADIUS: {self.flow_radius}px", 12, 80, self.flow_radius, 2, self.on_flow_radius)
         self.add_slider_block("yolo_crop_pad", f"YOLO SNAP CROP PAD: {self.yolo_crop_pad}px", 50, 260, self.yolo_crop_pad, 5, self.on_yolo_crop_pad)
 
-        request_android_permissions()
-        self.start_camera()
         Clock.schedule_interval(self.update, 1 / 30.0)
+        request_android_permissions(self._on_permissions)
 
     def add_slider_block(self, attr_name, label_text, min_v, max_v, value, step, callback):
         label = Label(text=label_text, size_hint=(1, None), height=dp(20), color=(0, 1, 0.42, 1), font_size=dp(11))
@@ -355,6 +356,11 @@ class MinosSigintUFO(FloatLayout):
             self.yolo_loaded = False
             self.yolo_net = None
             self.yolo_status = f"YOLO: LOAD FAIL {type(exc).__name__}"
+
+    def _on_permissions(self, permissions, grants):
+        # Called after the user responds to the permission dialog.
+        # Small delay so Android has time to register the grant before we open camera.
+        Clock.schedule_once(lambda dt: self.start_camera(), 0.5)
 
     def start_camera(self):
         self.capture = cv2.VideoCapture(self.camera_index)
