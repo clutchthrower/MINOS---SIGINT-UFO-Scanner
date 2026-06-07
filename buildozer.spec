@@ -5,7 +5,7 @@ package.domain = art.kruix
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas,onnx
 version = 1.0
-requirements = python3==3.11.9,kivy,numpy,opencv
+requirements = python3,kivy,numpy,opencv
 orientation = portrait
 fullscreen = 0
 android.permissions = CAMERA, INTERNET, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
