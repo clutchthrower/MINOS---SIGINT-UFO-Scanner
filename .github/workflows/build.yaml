@@ -11,6 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Clean Previous Builds
+        run: |
+          rm -rf bin
+          rm -rf .buildozer
+
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
         with:
