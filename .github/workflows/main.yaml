@@ -1,0 +1,40 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show files
+        run: |
+          pwd
+          ls -la
+
+      - name: Install Buildozer
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install buildozer Cython==0.29.33
+
+      - name: System info
+        run: |
+          free -h
+          df -h
+          nproc
+
+      - name: Build APK
+        run: |
+          buildozer android debug -v
+
+      - name: Upload APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            .buildozer/**
+            bin/**
