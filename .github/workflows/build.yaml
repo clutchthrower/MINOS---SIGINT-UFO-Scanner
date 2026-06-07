@@ -15,11 +15,12 @@ jobs:
         run: |
           rm -rf bin
           rm -rf .buildozer
+          rm -rf ~/.gradle
 
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
         with:
-          buildozer-cmd: buildozer android debug
+          buildozer-cmd: buildozer android debug --gradle-clear-cache
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
