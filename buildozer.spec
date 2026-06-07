@@ -15,4 +15,4 @@ android.archs = arm64-v8a
 android.accept_sdk_license = True
 p4a.branch = master
 # entrypoint
-# android.entrypoint = UFOscanner.py
+# android.entrypoint = main.py
