@@ -11,33 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          # Automatically accepts all Android SDK licenses
-          log-accepted-android-sdk-licenses: true
-
-      - name: Install Android Build Tools and AIDL
-        run: |
-          # 1. Automatically accept licenses via sdkmanager
-          yes | sdkmanager --licenses || true
-          
-          # 2. Install standard build-tools (Adjust version if your buildozer.spec requires a specific one, e.g., 34.0.0)
-          sdkmanager "build-tools;34.0.0" "platform-tools" "platforms;android-34"
-          
-          # 3. Explicitly add build-tools to the GitHub Actions PATH so buildozer can find 'aidl'
-          echo "${ANDROID_HOME}/build-tools/34.0.0" >> $GITHUB_PATH
-
       - name: Build APK
         uses: digreatbrian/buildozer-action@v2
         with:
           buildozer_version: stable
+          command: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
