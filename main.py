@@ -64,8 +64,12 @@ RED = (255, 50, 50)
 CYAN = (40, 220, 255)
 WHITE = (230, 255, 235)
 
-MODEL_DIR = "/storage/emulated/0/Python Projects/models"
-YOLO_ONNX_PATH = os.path.join(MODEL_DIR, "yolov8n.onnx")
+# Resolve model path: bundled inside the APK takes priority,
+# falling back to the old Pydroid 3 location for manual installs.
+_APP_DIR = os.path.dirname(os.path.abspath(__file__))
+_BUNDLED_MODEL = os.path.join(_APP_DIR, "models", "yolov8n.onnx")
+_PYDROID_MODEL = "/storage/emulated/0/Python Projects/models/yolov8n.onnx"
+YOLO_ONNX_PATH = _BUNDLED_MODEL if os.path.exists(_BUNDLED_MODEL) else _PYDROID_MODEL
 
 COCO_CLASSES = [
     "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat",
