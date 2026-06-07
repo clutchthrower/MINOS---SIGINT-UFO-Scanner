@@ -1201,6 +1201,11 @@ class MinosSigintUFO(FloatLayout):
             frame = None if self.frame is None else self.frame.copy()
         if frame is None:
             return
+        # Normalize to BGR — Android camera can return grayscale or BGRA
+        if len(frame.shape) == 2:
+            frame = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
+        elif frame.shape[2] == 4:
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
         frame = self.apply_camera_zoom(frame)
         display = self.render_base(frame)
 
