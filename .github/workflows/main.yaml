@@ -34,7 +34,7 @@ jobs:
 
       - name: Build APK
         run: |
-          buildozer android debug -v
+          buildozer android debug
 
       - name: Upload APK
         if: always()
